@@ -19,7 +19,7 @@ import { EventMysqlRepository } from '../event-mysql.repository';
 import { WaitingListMysqlRepository } from '../waiting-list-mysql.repository';
 
 describe('WaitingListMysqlRepository', () => {
-  let orm: MikroORM<MySqlDriver>;
+  let orm: MikroORM;
 
   beforeEach(async () => {
     orm = await MikroORM.init<MySqlDriver>({
