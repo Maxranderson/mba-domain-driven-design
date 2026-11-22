@@ -19,6 +19,7 @@ import { EventAddedSection } from '../events/domain-events/event-added-section.e
 import { EventChangedSectionSection } from '../events/domain-events/event-changed-section-information.event';
 import { EventChangedSpotLocation } from '../events/domain-events/event-changed-spot-location.event';
 import { EventMarkedSportAsReserved } from '../events/domain-events/event-marked-sport-as-reserved.event';
+import { EventSpotReleased } from '../events/domain-events/event-spot-released.event';
 
 export class EventId extends Uuid {}
 
@@ -225,6 +226,37 @@ export class Event extends AggregateRoot {
     this.addEvent(
       new EventMarkedSportAsReserved(this.id, section.id, command.spot_id),
     );
+  }
+
+  /**
+   * Liberação de lugar: devolve um lugar reservado à disponibilidade.
+   * Quem chama só conhece o spot_id (vindo do pedido cancelado), por isso é o
+   * próprio Event quem localiza a seção dona do lugar.
+   */
+  markSpotAsAvailable(command: { spot_id: EventSpotId }) {
+    const section = this.sections.find((s) => s.hasSpot(command.spot_id));
+
+    if (!section) {
+      throw new Error('Spot not found');
+    }
+
+    section.markSpotAsAvailable(command.spot_id);
+    this.addEvent(new EventSpotReleased(this.id, section.id, command.spot_id));
+  }
+
+  /**
+   * Seção esgotada: nenhum lugar dela está disponível para reserva.
+   * Derivado da disponibilidade dos lugares, não do contador total_spots_reserved.
+   */
+  isSectionSoldOut(section_id: EventSectionId) {
+    const section = this.sections.find((s) => s.id.equals(section_id));
+    if (!section) {
+      throw new Error('Section not found');
+    }
+    if (!this.is_published) {
+      return false;
+    }
+    return section.isSoldOut();
   }
 
   get sections(): ICollection<EventSection> {
