@@ -100,3 +100,20 @@ Content-Type: application/json
     "spot_id": "96298e63-5a38-4352-b97d-322259f10921",
     "card_token": "tok_visa"
 }
+
+###
+@order_id = c17de01e-dc6e-46da-bc59-de5bf896698e
+
+### Cancelar pedido (libera o lugar e notifica o primeiro da fila, por reação)
+POST http://localhost:3000/events/{{event_id}}/orders/{{order_id}}/cancel
+
+### Consultar a lista de espera da seção
+GET http://localhost:3000/events/{{event_id}}/sections/{{section_id}}/waiting-list
+
+### Entrar na lista de espera (só com a seção esgotada)
+POST http://localhost:3000/events/{{event_id}}/sections/{{section_id}}/waiting-list
+Content-Type: application/json
+
+{
+    "customer_id": "{{customer_id}}"
+}
