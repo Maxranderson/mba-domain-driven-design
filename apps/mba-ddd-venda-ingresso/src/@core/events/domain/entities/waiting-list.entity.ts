@@ -26,10 +26,6 @@ export type WaitingListConstructorProps = {
   section_id: EventSectionId | string;
 };
 
-/**
- * Lista de espera de uma seção (event_id + section_id).
- * Agregado separado do Event: referencia evento e seção apenas por ID.
- */
 export class WaitingList extends AggregateRoot {
   id: WaitingListId;
   event_id: EventId;
@@ -60,10 +56,6 @@ export class WaitingList extends AggregateRoot {
     });
   }
 
-  /**
-   * Entrada na fila: o cliente ocupa a próxima posição por ordem de chegada.
-   * Invariante: um cliente não entra duas vezes enquanto tiver entrada PENDING.
-   */
   join(command: { customer_id: CustomerId }) {
     const alreadyWaiting = this.entries.find(
       (entry) => entry.belongsTo(command.customer_id) && entry.isPending(),
@@ -90,10 +82,6 @@ export class WaitingList extends AggregateRoot {
     return entry;
   }
 
-  /**
-   * Notificação: promove a primeira entrada PENDING para NOTIFIED, oferecendo
-   * o lugar liberado. Sem entrada pendente, não faz nada.
-   */
   notifyFirstPending(command: { spot_id: EventSpotId }) {
     const entry = this.firstPendingEntry();
     if (!entry) {

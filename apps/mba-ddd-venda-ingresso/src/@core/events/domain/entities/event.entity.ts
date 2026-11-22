@@ -228,11 +228,6 @@ export class Event extends AggregateRoot {
     );
   }
 
-  /**
-   * Liberação de lugar: devolve um lugar reservado à disponibilidade.
-   * Quem chama só conhece o spot_id (vindo do pedido cancelado), por isso é o
-   * próprio Event quem localiza a seção dona do lugar.
-   */
   markSpotAsAvailable(command: { spot_id: EventSpotId }) {
     const section = this.sections.find((s) => s.hasSpot(command.spot_id));
 
@@ -244,10 +239,6 @@ export class Event extends AggregateRoot {
     this.addEvent(new EventSpotReleased(this.id, section.id, command.spot_id));
   }
 
-  /**
-   * Seção esgotada: nenhum lugar dela está disponível para reserva.
-   * Derivado da disponibilidade dos lugares, não do contador total_spots_reserved.
-   */
   isSectionSoldOut(section_id: EventSectionId) {
     const section = this.sections.find((s) => s.id.equals(section_id));
     if (!section) {

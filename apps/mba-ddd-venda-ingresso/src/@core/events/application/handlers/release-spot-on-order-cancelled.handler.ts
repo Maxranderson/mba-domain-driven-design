@@ -4,10 +4,6 @@ import { OrderCancelled } from '../../domain/events/domain-events/order-cancelle
 import { IEventRepository } from '../../domain/repositories/event-repository.interface';
 import { ISpotReservationRepository } from '../../domain/repositories/spot-reservation-repository.interface';
 
-/**
- * Reação ao pedido cancelado: liberação do lugar.
- * Devolve o lugar no agregado Event e remove a trava de reserva (SpotReservation).
- */
 export class ReleaseSpotOnOrderCancelledHandler implements IDomainEventHandler {
   constructor(
     private eventRepo: IEventRepository,

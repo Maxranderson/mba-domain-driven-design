@@ -88,8 +88,8 @@ test('deve encontrar o evento dono de um lugar (findByEventSpotId)', async () =>
   expect(found.id.equals(event1.id)).toBe(true);
   // o agregado vem inteiro, não só o ramo filtrado
   expect(found.sections.size).toBe(2);
-  expect(found.sections.values()[0].spots.size).toBe(3);
-  expect(found.sections.values()[1].spots.size).toBe(2);
+  expect(found.sections.values().find(s => s.name === "S1").spots.size).toBe(3);
+  expect(found.sections.values().find(s => s.name === "S2").spots.size).toBe(2);
 
   const foundByString = await eventRepo.findByEventSpotId(
     event2.sections.values()[0].spots.values()[0].id.value,

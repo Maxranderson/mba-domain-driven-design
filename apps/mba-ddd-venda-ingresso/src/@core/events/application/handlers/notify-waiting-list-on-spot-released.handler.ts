@@ -3,9 +3,6 @@ import { DomainEventManager } from '../../../common/domain/domain-event-manager'
 import { EventSpotReleased } from '../../domain/events/domain-events/event-spot-released.event';
 import { IWaitingListRepository } from '../../domain/repositories/waiting-list-repository.interface';
 
-/**
- * Política: lugar liberado -> notificar o primeiro da lista de espera da seção.
- */
 export class NotifyWaitingListOnSpotReleasedHandler
   implements IDomainEventHandler
 {

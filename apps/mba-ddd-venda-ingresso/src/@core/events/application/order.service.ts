@@ -26,11 +26,6 @@ export class OrderService {
     return this.orderRepo.findAll();
   }
 
-  /**
-   * Cancelamento do pedido. Só cancela e registra o OrderCancelled: a
-   * liberação do lugar e a notificação da lista de espera são reações
-   * (handlers), disparadas pelo ApplicationService ao publicar os eventos.
-   */
   async cancel(input: { order_id: string }) {
     return this.applicationService.run(async () => {
       const order = await this.orderRepo.findById(input.order_id);

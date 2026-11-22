@@ -69,12 +69,6 @@ describe('Fluxo: cancelamento do pedido -> liberação do lugar -> notificação
     await orm.close();
   });
 
-  /**
-   * Monta o grafo de objetos de um "request": um EntityManager, os
-   * repositórios, o ApplicationService e os handlers registrados no
-   * DomainEventManager, reproduzindo DomainEventsModule.onModuleInit (stored
-   * events) e EventsModule.onModuleInit (handlers + evento de integração).
-   */
   function compose(em: EntityManager) {
     const uow = new UnitOfWorkMikroOrm(em);
     const domainEventManager = new DomainEventManager();
