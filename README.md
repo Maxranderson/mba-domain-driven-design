@@ -31,14 +31,6 @@ Quando um cliente cancela um pedido, o lugar volta à venda e o primeiro cliente
 
 ```
 POST /events/:event_id/orders/:order_id/cancel       (comando: cancelar pedido)
-  Order.cancel() ──► OrderCancelled
-      └─ ReleaseSpotOnOrderCancelledHandler
-           Event.markSpotAsAvailable() + remove SpotReservation ──► EventSpotReleased
-              └─ NotifyWaitingListOnSpotReleasedHandler   (política)
-                   WaitingList.notifyFirstPending() ──► SpotOfferedToWaitingCustomer
-                      └─ SpotOfferedToWaitingCustomerIntegrationEvent
-                           ──► Bull "integration-events" ──► RabbitMQ ──► apps/emails (console.log)
-
 POST /events/:event_id/sections/:section_id/waiting-list   (comando: entrar na fila) body: { customer_id }
 GET  /events/:event_id/sections/:section_id/waiting-list   (consulta da fila)
 ```
